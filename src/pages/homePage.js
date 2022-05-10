@@ -7,7 +7,7 @@ import MovieList from "../components/movieList";
 import Fab from "@material-ui/core/Fab";
 import Drawer from "@material-ui/core/Drawer";
 
-const useStyles = makeStyles((theme) =>  ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: "20px",
   },
@@ -41,6 +41,14 @@ const MovieListPage = (props) => {
     else setGenreFilter(value);
   };
 
+  // New function
+  const addToFavourites = (movieId) => {
+    const updatedMovies = movies.map((m) =>
+      m.id === movieId ? { ...m, favourite: true } : m
+    );
+    setMovies(updatedMovies);
+  };
+
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&page=1`
@@ -58,15 +66,18 @@ const MovieListPage = (props) => {
 
   return (
     <>
-    <Grid container className={classes.root}>
-      <Grid item xs={12}>
-        <Header title={"Home Page"} />
+      <Grid container className={classes.root}>
+        <Grid item xs={12}>
+          <Header title={"Home Page"} />
+        </Grid>
+        <Grid item container spacing={5}>
+          <MovieList
+            movies={displayedMovies}
+            selectFavourite={addToFavourites}
+          />
+        </Grid>
       </Grid>
-      <Grid item container spacing={5}>
-        <MovieList movies={displayedMovies}></MovieList>
-      </Grid>
-    </Grid>
-    <Fab
+      <Fab
         color="secondary"
         variant="extended"
         onClick={() => setDrawerOpen(true)}
