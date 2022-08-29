@@ -1,33 +1,33 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import SearchIcon from "@material-ui/icons/Search";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+// import makeStyles from '@mui/styles/makeStyles';
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../spinner'
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   root: {
     maxWidth: 345,
   },
   media: { height: 300 },
 
   formControl: {
-    margin: theme.spacing(1),
+    margin: 1,
     minWidth: 220,
     backgroundColor: "rgb(255, 255, 255)",
   },
-}));
+} ;
 
 export default function FilterMoviesCard(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { data, error, isLoading, isError } = useQuery("genres", getGenres);
 
   if (isLoading) {
@@ -57,14 +57,14 @@ export default function FilterMoviesCard(props) {
 
   return (
     <>
-      <Card className={classes.root} variant="outlined">
+      <Card sx={styles.root} variant="outlined">
         <CardContent>
           <Typography variant="h5" component="h1">
             <SearchIcon fontSize="large" />
             Filter the movies.
           </Typography>
           <TextField
-            className={classes.formControl}
+            sx={styles.formControl}
             id="filled-search"
             label="Search field"
             type="search"
@@ -73,7 +73,7 @@ export default function FilterMoviesCard(props) {
             onChange={handleTextChange}
           />
 
-          <FormControl className={classes.formControl}>
+          <FormControl sx={styles.formControl}>
             <InputLabel id="genre-label">Genre</InputLabel>
             <Select
               labelId="genre-label"
@@ -92,7 +92,7 @@ export default function FilterMoviesCard(props) {
           </FormControl>
         </CardContent>
       </Card>
-      <Card className={classes.root} variant="outlined">
+      <Card sx={styles.root} variant="outlined">
         <CardContent>
           <Typography variant="h5" component="h1">
             <SearchIcon fontSize="large" />

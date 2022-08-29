@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import makeStyles from '@mui/styles/makeStyles';
+import Box from "@mui/material/Box";
 import { useForm } from "react-hook-form";
 import { MoviesContext } from "../../contexts/moviesContext";
-import MenuItem from "@material-ui/core/MenuItem";
-import Snackbar from "@material-ui/core/Snackbar"; 
-import MuiAlert from "@material-ui/lab/Alert";
+import MenuItem from "@mui/material/MenuItem";
+import Snackbar from "@mui/material/Snackbar"; 
+import MuiAlert from '@mui/material/Alert';
 import {useNavigate} from 'react-router-dom'
 
 const ratings = [

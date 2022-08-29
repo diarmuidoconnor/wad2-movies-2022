@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
-import Grid from "@material-ui/core/Grid";
-import Fab from "@material-ui/core/Fab";
-import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@mui/material/Grid";
+import Fab from "@mui/material/Fab";
+import Drawer from "@mui/material/Drawer";
+// import makeStyles from '@mui/styles/makeStyles';
 import MovieList from "../movieList";
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   root: {
     backgroundColor: "#bfbfbf",
-    paddingTop: theme.spacing(7),
+    paddingTop: 7,
   },
   fab: {
-    marginTop: theme.spacing(8),
+    marginTop: 8,
     position: "fixed",
-    top: theme.spacing(2),
-    right: theme.spacing(2),
+    top: 2,
+    right: 2,
   },
-}));
+};
 
 function MovieListPageTemplate({ movies, title, action }) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [titleFilter, setTitleFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -43,11 +43,11 @@ function MovieListPageTemplate({ movies, title, action }) {
 
   return (
     <>
-      <Grid container className={classes.root}>
+      <Grid container sx={styles.root}>
         <Grid item xs={12}>
           <Header title={title} />
         </Grid>
-        <Grid item container spacing={5}>
+        <Grid item container spacing={2}>
           <MovieList action={action} movies={displayedMovies} />
         </Grid>
       </Grid>
@@ -55,7 +55,7 @@ function MovieListPageTemplate({ movies, title, action }) {
         color="secondary"
         variant="extended"
         onClick={() => setDrawerOpen(true)}
-        className={classes.fab}
+        sx={styles.fab}
       >
         Filter
       </Fab>
