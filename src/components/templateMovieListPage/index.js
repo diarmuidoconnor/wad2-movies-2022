@@ -10,7 +10,6 @@ import MovieList from "../movieList";
 const styles = {
   root: {
     backgroundColor: "#bfbfbf",
-    paddingTop: 7,
   },
   fab: {
     marginTop: 8,

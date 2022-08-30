@@ -1,32 +1,25 @@
 import React from "react";
 import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
-import makeStyles from '@mui/styles/makeStyles';
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner'
+import Spinner from "../spinner";
 
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: theme.spacing(7),
-  },
+const styles = {
   imageListRoot: {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-around",
   },
   imageList: {
-    width: 450,
-    height: '100vh',
+    height: "100vh",
   },
-}));
+};
 
 const TemplateMoviePage = ({ movie, children }) => {
-  const classes = useStyles();
-  const { data , error, isLoading, isError } = useQuery(
+  const { data, error, isLoading, isError } = useQuery(
     ["images", { id: movie.id }],
     getMovieImages
   );
@@ -38,16 +31,16 @@ const TemplateMoviePage = ({ movie, children }) => {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  const images = data.posters 
+  const images = data.posters;
 
   return (
-    <div className={classes.root}>
+    <>
       <MovieHeader movie={movie} />
 
-      <Grid container spacing={5} style={{ padding: "15px" }}>
+      <Grid container spacing={5} sx={{ padding: "15px" }}>
         <Grid item xs={3}>
-          <div className={classes.imageListRoot}>
-            <ImageList rowHeight={500} className={classes.gridList} cols={1}>
+          <div sx={styles.imageListRoot}>
+            <ImageList rowHeight={500} sx={styles.imageList} cols={1}>
               {images.map((image) => (
                 <ImageListItem key={image.file_path} cols={1}>
                   <img
@@ -64,7 +57,7 @@ const TemplateMoviePage = ({ movie, children }) => {
           {children}
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 };
 

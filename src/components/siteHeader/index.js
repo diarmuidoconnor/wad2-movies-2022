@@ -4,6 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import { styled } from '@mui/material/styles';
 
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,6 +12,8 @@ import Menu from "@mui/material/Menu";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const styles = {
   title: {
@@ -120,6 +123,7 @@ const SiteHeader = () => {
         )}
       </Toolbar>
     </AppBar>
+    <Offset />
   </>;
 };
 
