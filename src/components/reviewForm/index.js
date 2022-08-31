@@ -1,15 +1,18 @@
 import React, { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import makeStyles from '@mui/styles/makeStyles';
-import Box from "@mui/material/Box";
-import { useForm } from "react-hook-form";
-import { MoviesContext } from "../../contexts/moviesContext";
 import MenuItem from "@mui/material/MenuItem";
-import Snackbar from "@mui/material/Snackbar"; 
-import MuiAlert from '@mui/material/Alert';
-import {useNavigate} from 'react-router-dom'
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { useForm, Controller } from "react-hook-form";
+import { MoviesContext } from "../../contexts/moviesContext";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+
+// RoomPreferences
+// https://blog.logrocket.com/using-material-ui-with-react-hook-form/
+// https://www.syncfusion.com/blogs/post/create-dynamic-forms-in-react-using-react-hook-forms.aspx
 
 const ratings = [
   {
@@ -34,46 +37,57 @@ const ratings = [
   },
 ];
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   root: {
-    marginTop: theme.spacing(2),
+    marginTop: 2,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "left",
   },
   form: {
     width: "100%",
     "& > * ": {
-      marginTop: theme.spacing(2),
+      marginTop: 2,
     },
   },
   textField: {
     width: "40ch",
   },
   submit: {
-    marginRight: theme.spacing(2),
+    marginRight: 2,
   },
   snack: {
-     width: "50%",
-     "& > * ": {
-       width: "100%",
-     },
-   },
-}));
+    width: "50%",
+    "& > * ": {
+      width: "100%",
+    },
+  },
+};
 
 const ReviewForm = ({ movie }) => {
-  const classes = useStyles();
-  const { register, handleSubmit, errors, reset } = useForm();
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm(defaultValues);
   const context = useContext(MoviesContext);
   const [rating, setRating] = useState(3);
-  const [open, setOpen] = useState(false);  //NEW
-  const navigate = useNavigate()          
+  const [open, setOpen] = useState(false); //NEW
+  const navigate = useNavigate();
+
+  const defaultValues = {
+    author: "",
+    review: "",
+    agree: false,
+    rating: "3",
+  };
 
   const handleRatingChange = (event) => {
     setRating(event.target.value);
   };
 
-  const handleSnackClose = (event) => {     
+  const handleSnackClose = (event) => {
     setOpen(false);
     navigate("/movies/favourites");
   };
@@ -83,17 +97,17 @@ const ReviewForm = ({ movie }) => {
     review.rating = rating;
     // console.log(review);
     context.addReview(movie, review);
-    setOpen(true);   // NEW
+    setOpen(true); // NEW
   };
 
   return (
-    <Box component="div" className={classes.root}>
+    <Box component="div" sx={styles.root}>
       <Typography component="h2" variant="h3">
         Write a review
       </Typography>
       {/* Start new code */}
       <Snackbar
-        className={classes.snack}
+        sx={styles.snack}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={open}
         onClose={handleSnackClose}
@@ -107,72 +121,92 @@ const ReviewForm = ({ movie }) => {
             Thank you for submitting a review
           </Typography>
         </MuiAlert>
-      </Snackbar>  
-      {/* End new code */}    
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <TextField
-          className={classes.textField}
-          variant="outlined"
-          margin="normal"
-          required
-          id="author"
-          label="Author's name"
+      </Snackbar>
+
+      <form sx={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Controller
           name="author"
-          autoFocus
-          inputRef={register({ required: "Author name required" })}
+          control={control}
+          rules={{ required: "Name is required" }}
+          defaultValue=""
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              sx={{ width: "40ch" }}
+              variant="outlined"
+              margin="normal"
+              required
+              onChange={onChange}
+              value={value}
+              id="author"
+              label="Author's name"
+              name="author"
+              autoFocus
+            />
+          )}
         />
         {errors.author && (
           <Typography variant="h6" component="p">
             {errors.author.message}
           </Typography>
         )}
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="content"
-          label="Review text"
-          id="content"
-          multiline
-          minRows={10}
-          inputRef={register({
-            required: "No review text",
+        <Controller
+          name="review"
+          control={control}
+          rules={{
+            required: "Review cannot be empty.",
             minLength: { value: 10, message: "Review is too short" },
-          })}
+          }}
+          defaultValue=""
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="review"
+              value={value}
+              onChange={onChange}
+              label="Review text"
+              id="review"
+              multiline
+              minRows={10}
+            />
+          )}
         />
-        {errors.content && (
+        {errors.review && (
           <Typography variant="h6" component="p">
-            {errors.content.message}
+            {errors.review.message}
           </Typography>
         )}
-        <TextField
-          id="select-rating"
-          select
-          variant="outlined"
-          label="Rating Select"
-          value={rating}
-          onChange={handleRatingChange}
-          helperText="Don't forget your rating"
-        >
-          {ratings.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
 
-        <Box className={classes.buttons}>
+        <Controller
+          control={control}
+          name="rating"
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              id="select-rating"
+              select
+              variant="outlined"
+              label="Rating Select"
+              value={rating}
+              onChange={handleRatingChange}
+              helperText="Don't forget your rating"
+            >
+              {ratings.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+        />
+
+        <Box sx={styles.buttons}>
           <Button
             type="submit"
             variant="contained"
             color="primary"
-            className={classes.submit}
+            sx={styles.submit}
           >
             Submit
           </Button>
@@ -180,7 +214,7 @@ const ReviewForm = ({ movie }) => {
             type="reset"
             variant="contained"
             color="secondary"
-            className={classes.submit}
+            sx={styles.submit}
             onClick={() => {
               reset({
                 author: "",
